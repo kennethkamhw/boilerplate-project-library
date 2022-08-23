@@ -18,6 +18,19 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// middleware for logging
+app.use((req, res, next) => {
+  console.log("");
+  console.log(`Recieved Request: METHOD = ${req.method}, URL = ${req.originalUrl}`);
+  next();
+});
+
+// connect to Database
+const { db } = require("./controller/connect.js");
+
+//Routing for API 
+apiRoutes(app);  
+
 //Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
@@ -26,9 +39,6 @@ app.route('/')
 
 //For FCC testing purposes
 fccTestingRoutes(app);
-
-//Routing for API 
-apiRoutes(app);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
